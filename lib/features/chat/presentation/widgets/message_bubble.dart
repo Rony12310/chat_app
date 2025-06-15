@@ -19,10 +19,8 @@ class MessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final alignment =
-    isSentByMe ? MainAxisAlignment.end : MainAxisAlignment.start;
-    final bubbleColor =
-    isSentByMe ? Colors.blue.shade400 : Colors.grey.withOpacity(0.2);
+    final alignment = isSentByMe ? MainAxisAlignment.end : MainAxisAlignment.start;
+    final bubbleColor = isSentByMe ? Colors.blue.shade400 : Colors.grey.withOpacity(0.2);
     final textColor = isSentByMe ? Colors.white : Colors.white;
 
     return Row(
@@ -31,8 +29,7 @@ class MessageBubble extends StatelessWidget {
       children: [
         Flexible(
           child: Container(
-            padding:
-            const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
             margin: const EdgeInsets.symmetric(horizontal: 8),
             decoration: BoxDecoration(
               color: bubbleColor,
@@ -41,6 +38,18 @@ class MessageBubble extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
+                if (!isSentByMe) // show sender name only for received messages
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 4),
+                    child: Text(
+                      message.senderName,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white70,
+                      ),
+                    ),
+                  ),
                 Text(
                   message.content,
                   style: TextStyle(

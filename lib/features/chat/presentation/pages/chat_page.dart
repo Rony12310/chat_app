@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../blocs/chat_bloc.dart';
 import '../blocs/chat_event.dart';
 import '../blocs/chat_state.dart';
@@ -7,7 +8,10 @@ import '../../domain/entities/message.dart';
 import '../widgets/message_bubble.dart';
 
 class ChatPage extends StatefulWidget {
-  const ChatPage({Key? key}) : super(key: key);
+  final String deviceId;
+  final String deviceName;
+
+  const ChatPage({Key? key, required this.deviceId, required this.deviceName}) : super(key: key);
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -22,7 +26,8 @@ class _ChatPageState extends State<ChatPage> {
 
     final message = Message(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
-      senderId: 'user',
+      senderId: widget.deviceId,
+      senderName: widget.deviceName,
       content: text,
       timestamp: DateTime.now(),
     );
@@ -63,15 +68,12 @@ class _ChatPageState extends State<ChatPage> {
                 return ListView.separated(
                   reverse: true,
                   physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 10,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   separatorBuilder: (_, __) => const SizedBox(height: 10),
                   itemCount: messages.length,
                   itemBuilder: (context, index) {
                     final message = messages[messages.length - 1 - index];
-                    final isMe = message.senderId == 'user';
+                    final isMe = message.senderId == widget.deviceId;
                     return MessageBubble(message: message, isSentByMe: isMe);
                   },
                 );
@@ -79,7 +81,6 @@ class _ChatPageState extends State<ChatPage> {
             ),
           ),
 
-          // Wrap input in SafeArea to avoid bottom nav bar overlap
           SafeArea(
             top: false,
             child: Container(
@@ -96,9 +97,7 @@ class _ChatPageState extends State<ChatPage> {
                       decoration: InputDecoration(
                         hintText: 'Start a message',
                         hintStyle: const TextStyle(color: Colors.grey),
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                        ),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 20),
                         filled: true,
                         fillColor: Colors.grey.withOpacity(0.1),
                         border: OutlineInputBorder(
