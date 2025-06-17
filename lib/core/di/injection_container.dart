@@ -11,26 +11,28 @@ import '../network/socket_manager.dart';
 final sl = GetIt.instance;
 
 Future<void> init(String url) async {
-  // Register SocketManager singleton
-  sl.registerLazySingleton<SocketManager>(() => SocketManager());
+  // Register socket manager singleton and connect immediately
+  final socketManager = SocketManager();
+  socketManager.connect(url);
+  sl.registerSingleton<SocketManager>(socketManager);
 
-  // Await the socket connection before proceeding
-  sl<SocketManager>().connect(url);
-
-  // Register data source using SocketManager instance
+  // Data Source
   sl.registerLazySingleton<ChatSocketDataSourceImpl>(
-        () => ChatSocketDataSourceImpl(sl<SocketManager>()),
+    () => ChatSocketDataSourceImpl(sl<SocketManager>()),
   );
 
-  // Register repository
+  // Repository
   sl.registerLazySingleton<ChatRepository>(
-        () => ChatRepositoryImpl(sl<ChatSocketDataSourceImpl>()),
+    () => ChatRepositoryImpl(sl<ChatSocketDataSourceImpl>()),
   );
 
-  // Register use cases
-  sl.registerLazySingleton(() => SendMessageUseCase(sl<ChatRepository>()));
-  sl.registerLazySingleton(() => ReceiveMessagesUseCase(sl<ChatRepository>()));
+  // Use Cases
+  sl.registerLazySingleton(() => SendMessageUseCase(sl()));
+  sl.registerLazySingleton(() => ReceiveMessagesUseCase(sl()));
 
-  // FIXED: Register bloc with correct constructor (only SocketManager)
-  sl.registerFactory(() => ChatBloc(sl<SocketManager>()));
+  // Bloc
+  sl.registerFactoryParam<ChatBloc, String, String>(
+    (deviceId, deviceName) =>
+        ChatBloc(sl<SocketManager>(), deviceId, deviceName),
+  );
 }

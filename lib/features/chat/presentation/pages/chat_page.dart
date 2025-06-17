@@ -11,7 +11,7 @@ class ChatPage extends StatefulWidget {
   final String deviceId;
   final String deviceName;
 
-  const ChatPage({Key? key, required this.deviceId, required this.deviceName}) : super(key: key);
+  const ChatPage({super.key, required this.deviceId, required this.deviceName});
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -43,20 +43,14 @@ class _ChatPageState extends State<ChatPage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
-        leading: const BackButton(color: Colors.white),
-        title: Row(
-          children: const [
-            CircleAvatar(radius: 20),
-            SizedBox(width: 10),
-            Text(
-              'Chat App',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w800,
-                color: Colors.white,
-              ),
-            ),
-          ],
+        automaticallyImplyLeading: false, // Removes back button
+        title: const Text(
+          'Chat App',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w800,
+            color: Colors.white,
+          ),
         ),
       ),
       body: Column(
@@ -68,7 +62,10 @@ class _ChatPageState extends State<ChatPage> {
                 return ListView.separated(
                   reverse: true,
                   physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 10,
+                  ),
                   separatorBuilder: (_, __) => const SizedBox(height: 10),
                   itemCount: messages.length,
                   itemBuilder: (context, index) {
@@ -80,7 +77,6 @@ class _ChatPageState extends State<ChatPage> {
               },
             ),
           ),
-
           SafeArea(
             top: false,
             child: Container(
@@ -97,9 +93,11 @@ class _ChatPageState extends State<ChatPage> {
                       decoration: InputDecoration(
                         hintText: 'Start a message',
                         hintStyle: const TextStyle(color: Colors.grey),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                        ),
                         filled: true,
-                        fillColor: Colors.grey.withOpacity(0.1),
+                        fillColor: Colors.grey.withAlpha((0.1 * 255).round()),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30),
                           borderSide: BorderSide.none,

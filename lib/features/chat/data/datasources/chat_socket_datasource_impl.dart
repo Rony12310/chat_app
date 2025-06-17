@@ -20,6 +20,7 @@ class ChatSocketDataSourceImpl {
     final messageModel = MessageModel(
       id: message.id,
       senderId: message.senderId,
+      senderName: message.senderName,
       content: message.content,
       timestamp: message.timestamp,
     );

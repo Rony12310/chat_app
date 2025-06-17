@@ -6,10 +6,10 @@ class MessageBubble extends StatelessWidget {
   final bool isSentByMe;
 
   const MessageBubble({
-    Key? key,
+    super.key,
     required this.message,
     required this.isSentByMe,
-  }) : super(key: key);
+  });
 
   String _formattedTimestamp(DateTime timestamp) {
     final hour = timestamp.hour.toString().padLeft(2, '0');
@@ -19,8 +19,12 @@ class MessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final alignment = isSentByMe ? MainAxisAlignment.end : MainAxisAlignment.start;
-    final bubbleColor = isSentByMe ? Colors.blue.shade400 : Colors.grey.withOpacity(0.2);
+    final alignment = isSentByMe
+        ? MainAxisAlignment.end
+        : MainAxisAlignment.start;
+    final bubbleColor = isSentByMe
+        ? Colors.blue.shade400
+        : Colors.grey.withAlpha((0.2 * 255).round());
     final textColor = isSentByMe ? Colors.white : Colors.white;
 
     return Row(
@@ -38,7 +42,7 @@ class MessageBubble extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                if (!isSentByMe) // show sender name only for received messages
+                if (!isSentByMe)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 4),
                     child: Text(
@@ -61,10 +65,7 @@ class MessageBubble extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   _formattedTimestamp(message.timestamp),
-                  style: const TextStyle(
-                    fontSize: 10,
-                    color: Colors.white60,
-                  ),
+                  style: const TextStyle(fontSize: 10, color: Colors.white60),
                 ),
               ],
             ),

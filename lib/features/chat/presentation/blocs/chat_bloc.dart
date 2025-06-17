@@ -9,9 +9,11 @@ import 'chat_state.dart';
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
   final SocketManager socketManager;
   final String deviceId;
+  final String deviceName; // <--- Add deviceName here
   late StreamSubscription<String> _socketSubscription;
 
-  ChatBloc(this.socketManager, this.deviceId) : super(ChatState.initial()) {
+  ChatBloc(this.socketManager, this.deviceId, this.deviceName)
+    : super(ChatState.initial()) {
     _socketSubscription = socketManager.messageStream.listen((data) {
       try {
         final map = jsonDecode(data);
@@ -35,7 +37,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       socketManager.sendMessage({
         "id": event.message.id,
         "senderId": event.message.senderId,
-        "senderName": event.message.senderName, // 👈 Add this
+        "senderName": event.message.senderName,
         "content": event.message.content,
         "timestamp": event.message.timestamp.toIso8601String(),
       });
