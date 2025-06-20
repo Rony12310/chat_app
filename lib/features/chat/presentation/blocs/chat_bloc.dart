@@ -9,7 +9,7 @@ import 'chat_state.dart';
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
   final SocketManager socketManager;
   final String deviceId;
-  final String deviceName; // <--- Add deviceName here
+  final String deviceName;
   late StreamSubscription<String> _socketSubscription;
 
   ChatBloc(this.socketManager, this.deviceId, this.deviceName)
